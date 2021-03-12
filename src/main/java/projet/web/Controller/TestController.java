@@ -1,10 +1,11 @@
-package projet.web;
+package projet.web.Controller;
 
 import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -12,8 +13,9 @@ import Model.JSend;
 import Model.Etudiant;
 
 @RestController
+@RequestMapping("/lycee")
 public class TestController {
-	@GetMapping("etudiant")
+	@GetMapping("/etudiant")
 	public JSend etudiants() throws Exception {
 		Etudiant  etu=new Etudiant();
 		Etudiant[] val=new Etudiant[0];
