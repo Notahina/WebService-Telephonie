@@ -6,7 +6,7 @@ import Model.JSend;
 
 public class AfficherController {
 	@GetMapping("afficher")
-	public JSend etudiants() throws Exception {
+	public JSend afficher() throws Exception {
 		JSend send=new JSend();
 		send.setData("TESTER");
 		send.setStatus(200);
