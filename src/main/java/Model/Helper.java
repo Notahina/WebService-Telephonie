@@ -34,10 +34,14 @@ public class Helper {
                 Class.forName("org.postgresql.Driver");
       		  System.out.println("Driver O.K.");
       		  
-      		  String url = "jdbc:postgresql://localhost:5432/baseetudiant";
-      		  String user = "useretu";
-      		  String passwd = "1234";
-
+      		 // String url = "jdbc:postgresql://localhost:5432/baseetudiant";
+      		  //String user = "useretu";
+      		  //String passwd = "1234";
+      		  String base="d95tfsaeju6b18";
+      		String url = "ec2-54-73-147-133.eu-west-1.compute.amazonaws.com/"+base;
+    		  String user = "rkieoczhzltzfc";
+    		  String passwd = "828cda5b3c4d8bdd2c17a304956887e280ccab9b7da665af6fd3f780701c1d3d";
+    		  
                 // Setup the connection with the DB
                 connect = DriverManager.getConnection(url, user, passwd);
                 System.out.println("mandeha");
