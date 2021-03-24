@@ -10,11 +10,10 @@ public class Credit {
 	String date_expiration;
 	
 	public Credit() {
-		this.setDate_expiration("2040-02-02");	
+		
 	}
 	
 	public Credit(int id_credit, String code, double montant, String date_expiration) {
-		super();
 		this.id_credit = id_credit;
 		this.code = code;
 		this.montant = montant;
@@ -59,7 +58,7 @@ public class Credit {
 	{
 		Model m=new Model();
 		Credit val=new Credit();
-		String req="SELECT*FROM CREDIT WHERE CODE='"+code+"' ";
+		String req="SELECT*FROM CREDIT WHERE CODE='"+code+"' AND DATE_EXPIRATION>NOW()";
 		Object[] oo=m.getResult(req, new Credit(), c);
 		if(oo.length>0)
 		{
@@ -72,7 +71,6 @@ public class Credit {
 		Double a = Math.random();
 		String code=a.toString();
 		String sub_code=code.substring(2, 16);
-		
 		return sub_code;
 	}
 	public boolean insertCredit(Credit credit,Connection c) throws Exception
@@ -82,7 +80,6 @@ public class Credit {
 		credit.setId_credit(id);
 		String code=this.genererate_code();
 		credit.setCode(code);
-		model.inserer("CREDIT", null, credit,c);
 		return true;
 	}
 	

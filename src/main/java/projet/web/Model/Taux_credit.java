@@ -99,5 +99,20 @@ public class Taux_credit {
 		valeur=depensee*tauxCredit.getValeur();
 		return valeur;
 	}
+	
+	public double get_duree_credit(String typeUtilisation,double valeur,String specification,Connection c) throws Exception
+	{
+		Taux_credit tc=taux_by_specification_id(typeUtilisation,specification,c);
+		return valeur/tc.getValeur();
+	}
+	
+	public double duree_appel_effectuable(int idUtilisateur,String specification,Connection c) throws Exception
+	{
+		Model model=new Model();
+		String now=model.getNow(c);
+		double solde_credit=new Credit_mouvement().get_solde_credit(idUtilisateur, now, c);
+		double duree=this.get_duree_credit("APPEL", solde_credit, specification, c);
+		return duree;
+	}
 
 }

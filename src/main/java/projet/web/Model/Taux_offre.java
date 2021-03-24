@@ -81,4 +81,12 @@ public class Taux_offre {
 		
 	}
 	
+	public double get_duree_offre(int idOffre,double valeur,String specification,Connection c) throws Exception
+	{
+		Taux_offre taux=this.taux_by_specification_id(idOffre, specification, c);
+		double duree=valeur/taux.getValeur();
+		return duree;
+	}
+
+	
 	}

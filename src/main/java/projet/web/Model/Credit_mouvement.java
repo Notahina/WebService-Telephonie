@@ -95,14 +95,15 @@ public class Credit_mouvement {
 		boolean val=false;
 		Model model =new Model();
 		Credit credit= new Credit().get_credit_by_code(code,c);
-		if(credit!=null)
+		if(credit.montant!=0)
 		{
 			//type=entree
-			int types=-1;
+			int types=1;
 			double montant=credit.getMontant();
 			String date_mouvement=model.getNow(c);
 			Credit_mouvement cm=new Credit_mouvement(id_utilisateur,types,montant,date_mouvement);
 			model.inserer("CREDIT_MOUVEMENT", null, cm, c);
+			model.supprimer("CREDIT", "ID_CREDIT",credit.getId_credit(),c);
 			val=true;
 		}
 		
