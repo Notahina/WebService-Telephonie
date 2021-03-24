@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import projet.web.Model.Credit_mouvement;
 import projet.web.Model.Helper;
 import projet.web.Model.Offre;
+import projet.web.Model.Offre_mouvement;
 import projet.web.Model.Stat_offre;
 
 public class Offre_service {
@@ -43,5 +45,26 @@ public class Offre_service {
 			c.close();
 		}
 		
+	}
+	public static boolean achat_offre_credit(int id_utilisateur,int id_offre) throws Exception
+	{
+		Connection c=new Helper().getConnection();
+		try {
+			boolean status=new Offre_mouvement().acheter_offre_credit(id_utilisateur, id_offre, c);
+			return status;
+		}finally {
+			c.close();
+		}
+	}
+	
+	public static boolean achat_offre_money(int id_utilisateur,int id_offre) throws Exception
+	{
+		Connection c=new Helper().getConnection();
+		try {
+			boolean status=new Offre_mouvement().acheter_offre_mobile(id_utilisateur, id_offre, c);
+			return status;
+		}finally {
+			c.close();
+		}
 	}
 }
