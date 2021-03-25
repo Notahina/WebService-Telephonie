@@ -7,6 +7,50 @@ ALTER ROLE EtuRole SUPERUSER;
 GRANT EtuRole TO ETU;
 
 psql -U etu -d telephonie
+------------------------------------------------------
+
+CREATE TABLE ConsommationOffre(
+	idcons int,
+	iduser int,
+	idoffre varchar(20),
+	types int , --0 appel 1 internet -2 sms
+	quantite double precision
+);
+
+CREATE TABLE offre (
+	idoffre varchar(20) PRIMARY KEY,
+	NOM_OFFRE varchar(50),
+	VALIDITE int,
+	prix double precision
+);
+CREATE TABLE VALEUR(
+	id varchar(20),
+	idoffre varchar(20),
+	nom varchar(50),
+	quantite double precision,
+	unite varchar(20)
+);
+CREATE   Table AchatOffre(
+	id varchar(20) PRIMARY KEY,
+	iduser int,
+	idoffre varchar(20),
+	datedebut date,
+	datefin   date,
+	FOREIGN KEY (idoffre) REFERENCES offre(idoffre)  
+);
+ INSERT INTO ConsommationOffre VALUES (1,1,'O1',0,200);
+INSERT INTO AchatOffre VALUES ('AO1',1,'O1','2021-03-11','2021-03-12');
+INSERT INTO AchatOffre VALUES ('AO2',1,'O2','2021-03-11','2021-03-12');
+
+INSERT INTO offre VALUES ('O1','Mora',1,500);
+INSERT INTO offre VALUES ('O2','FIRST',30,10000);
+INSERT INTO offre VALUES ('O3','Mora One',1,500);
+
+INSERT INTO VALEUR VALUES ('V1','O1','Appel',150,'s');
+INSERT INTO VALEUR VALUES ('V2','O1','Internet',50,'mo');
+INSERT INTO VALEUR VALUES ('V3','O2','Appel',1500,'s');
+INSERT INTO VALEUR VALUES ('V4','O2','Internet',150,'mo');
+
 -------------------------DROP---------------------
 DROP table Token CASCADe
 --------------------------------------------SEQUENCE---------------------------------
@@ -39,7 +83,7 @@ CREATE TABLE IF NOT EXISTS Offre(
 	NOM_OFFRE varchar(50),
 	DATE_OFFRE date,
 	VALIDITE int,
-	prix double
+	prix double precision
 );
 CREATE TABLE IF NOT EXISTS TAUX_OFFRE
 (
@@ -65,7 +109,7 @@ CREATE OR REPLACE VIEW OFFRE_VALIDE AS SELECT OFFRE_MOUVEMENT.*
 FROM OFFRE,OFFRE_MOUVEMENT 
 WHERE OFFRE_MOUVEMENT.ID_OFFRE=OFFRE.ID_OFFRE 
 AND (OFFRE_MOUVEMENT.DATE_MOUVEMENT::timestamp+ OFFRE.VALIDITE*interval '24 HOUR')>=NOW();
-=1(
+
 --STATISTIQUES
 --OFFRE LE PLSU ACHETER
 SELECT sum(VALEUR_OFFRE),idoffre from OFFRE_MOUVEMENT group by ID_OFFRE;
@@ -122,7 +166,7 @@ CREATE TABLE IF NOT EXISTS AchatOffre(
 	ID_OFFRE int,
 	ID_UTILISATEUR int,
 	TYPES_ACHAT varchar(50),
-	DATE_ACHAT datetime,
+	DATE_ACHAT timestamp,
 	FOREIGN KEY (ID_OFFRE) REFERENCES Offre(ID_OFFRE),
 	FOREIGN KEY (ID_UTILISATEUR) REFERENCES UTILISATEUR(ID_UTILISATEUR)
 );
@@ -155,8 +199,8 @@ CREATE TABLE IF NOT EXISTS CREDIT_MOUVEMENT(
 	ID_CREDIT int,
 	ID_UTILISATEUR int,
 	TYPES varchar(30),
-	MONTANT double,
-	DATE_MOUVEMENT datetime
+	MONTANT double precision,
+	DATE_MOUVEMENT timestamp
 );
 CREATE TABLE IF NOT EXISTS APPEL(
 	ID_APPEL int,
@@ -164,5 +208,5 @@ CREATE TABLE IF NOT EXISTS APPEL(
 	NUMERO1 varchar(15),
 	NUMERO2 varchar(15),
 	DUREE int,
-	DATE_APPEL datetime
+	DATE_APPEL timestamp
 );

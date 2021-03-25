@@ -22,7 +22,7 @@ public class Helper {
        // String user="root";
         //String passwd="";
         //String base="BOURSE";
-        public Connection getConnection()
+        public Connection getConnectionLocal()
         {
             
             Connection connect=null;
@@ -52,7 +52,7 @@ public class Helper {
             }
             return connect;
         }
-        public Connection getConnectionHeroku()
+        public Connection getConnection()
         {
             
             Connection connect=null;
