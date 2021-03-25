@@ -61,7 +61,16 @@ public class Model{
     	int val=(int) this.getOne(req, "int", c);
     	return val+1;
     }
-    
+    public void supprimer(String nomTable, String attr,int id,Connection connect) throws Exception
+	{
+		String mysql="DELETE FROM "+nomTable+" WHERE ";
+		int first=1;
+		
+		mysql=mysql+attr+"="+id;
+		Statement state= connect.createStatement();
+		state.execute(mysql);
+		//state.execute("COMMIT");
+	}
     public String inserer(String nomTable,String incr, Object ob) throws Exception
 	{
 		String[] attribut=getAttribut(ob);

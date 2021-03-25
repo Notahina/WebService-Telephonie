@@ -97,6 +97,34 @@ public class Utilisateur {
 			throw e;
 		}
 	}
+	
+	public Utilisateur get_by_num(Connection c,String numero) throws Exception{
+		try {
+			Model model=new Model();
+			String requete="SELECT * FROM UTILISATEUR where telephone='"+numero+"'";
+			Object[] oo=model.getResult(requete, new Utilisateur(),c );
+			System.out.print("taille="+oo.length);
+			if(oo.length==0) throw new Exception("numero inconnu");
+			Utilisateur u=(Utilisateur) oo[0];
+			
+			return u;
+		}catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	public Utilisateur get_by_id(int idUtilisateur,Connection c) throws Exception
+	{
+		Utilisateur val=null;
+		Model model=new Model();
+		String req="SELECT*FROM UTILISATEUR WHERE ID_UTILISATEUR="+idUtilisateur;
+		Object[]oo=model.getResult(req, new Utilisateur(), c);
+		if(oo.length>0)
+		{
+			val=(Utilisateur)oo[0];
+		}
+		return val;
+	}
 	public Utilisateur() {
 		
 	}
