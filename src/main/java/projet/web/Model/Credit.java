@@ -1,6 +1,7 @@
 package projet.web.Model;
 
 import java.sql.Connection;
+import java.util.Date;
 
 public class Credit {
 	
@@ -53,7 +54,19 @@ public class Credit {
 	public void setDate_expiration(String date_expiration) {
 		this.date_expiration = date_expiration;
 	}
-
+	public Credit[] get_credit(Connection c) throws Exception
+	{
+		Model m=new Model();
+		
+		String req="SELECT*FROM CREDIT limit 15";
+		Object[] oo=m.getResult(req, new Credit(), c);
+		Credit[] val=new Credit[oo.length];
+		for(int i=0;i<val.length;i++)
+		{
+			val[i]=(Credit)oo[i];
+		}
+		return val;
+	}
 	public Credit get_credit_by_code(String code,Connection c) throws Exception
 	{
 		Model m=new Model();
@@ -73,13 +86,19 @@ public class Credit {
 		String sub_code=code.substring(2, 16);
 		return sub_code;
 	}
-	public boolean insertCredit(Credit credit,Connection c) throws Exception
+	public boolean insertCreditGenere(Credit credit,Connection c) throws Exception
 	{
+		Date date=new Date();
+		String dte=AuthService.DateToString(date);
 		Model model=new Model();
 		int id=model.nextVal("CREDIT", c);
 		credit.setId_credit(id);
 		String code=this.genererate_code();
 		credit.setCode(code);
+		credit.setDate_expiration(dte);
+		System.out.println("crediittttttt");
+		model.inserer("CREDIT", null, credit, c);
+		System.out.println("insert");
 		return true;
 	}
 	

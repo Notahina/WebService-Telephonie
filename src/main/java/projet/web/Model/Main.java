@@ -3,7 +3,10 @@ package projet.web.Model;
 import java.sql.Connection;
 import java.util.Date;
 
+import projet.web.Service.Credit_service;
+import projet.web.Service.Money_service;
 import projet.web.Service.Offre_service;
+import projet.web.Service.Utilisateur_service;
 
 
 public class Main {
@@ -11,29 +14,19 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		Connection c=new Helper().getConnection();
-		try
-		{
-			//Etudiant etu=new Etudiant("E6","Njanah","Njanah","1999-12-02");
-			//Model m=new Model();
-			//m.inserer("Etudiant",null, etu,c);
-			/*Double a = Math.random();
-			System.out.println("rand="+a);
-			String code=a.toString();
-			String sub_code=code.substring(2, 16);
-			System.out.println("sub_code="+sub_code);
-			System.out.println("sub_code_length="+sub_code.length());*/
-			Credit credit=new Credit();
-			credit.setMontant(5000);
-			boolean valiny=credit.insertCredit(credit, c);
-			System.out.println("sub_code ="+valiny);
-		}
-		catch(Exception ex)
-		{
-			throw ex;
+		
+//			Credit credit=new Credit();
+//			credit.setMontant(500);
+//			credit.insertCreditGenere(credit, c);
+//			System.out.println("code="+credit.getCode());
+			
+		try {
+			boolean bb=Utilisateur_service.Logout("Bearer $2a$08$PAwNLxzeHls3Zjdh9timk.vnXIIxG95jbUojM.4k1qw3sxEPoH2C2");
 		}finally {
 			c.close();
 		}
-		
+			
+			
 	}
 
 }

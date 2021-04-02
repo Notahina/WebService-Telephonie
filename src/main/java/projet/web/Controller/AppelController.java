@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,11 +24,11 @@ import projet.web.Service.Offre_service;
 @RequestMapping("/appel")
 public class AppelController {
 	@PostMapping("/appeler")
-	public JSend appeler(@RequestBody Appel appel)throws Exception {
+	public JSend appeler(@RequestBody Appel appel,@RequestHeader(name = "Authorization") String authHeader)throws Exception {
 		JSend send = new JSend();
 		send.setStatus(200);
 		try {
-			boolean val =Appel_service.appeler(appel);
+			boolean val =Appel_service.appeler(appel,authHeader);
 			send.setData(val);
 		}catch(Exception e) {
 			send.setStatus(400);
@@ -35,12 +36,12 @@ public class AppelController {
 		}
 		return send;
 	}
-	@GetMapping("/historique/{idUtilisateur}/{types}/{dates}")
-	public JSend getHistorique(@PathVariable int idUtilisateur, @PathVariable String types, @PathVariable String dates) throws Exception {
+	@GetMapping("/historique/{types}/{dates}")
+	public JSend getHistorique(@RequestHeader(name = "Authorization") String authHeader, @PathVariable String types, @PathVariable String dates) throws Exception {
 		JSend js=new JSend();
 		js.setStatus(200);
 		try {
-			Appel[] get=Appel_service.historique(idUtilisateur, types, dates);
+			Appel[] get=Appel_service.historique(authHeader, types, dates);
 			js.setData(get);
 		}catch(Exception e) {
 			js.setStatus(400);

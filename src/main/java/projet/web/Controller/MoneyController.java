@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import projet.web.Model.Forfait_offre;
 import projet.web.Model.JSend;
 import projet.web.Model.MoneyNonValide;
 import projet.web.Model.Money_mouvement;
@@ -21,13 +23,25 @@ import projet.web.Service.Money_service;
 @RestController
 @RequestMapping("/money")
 public class MoneyController {	
+	@PostMapping("")
+	public JSend InsertForfait(@RequestBody Forfait_offre[]forfait,@RequestHeader(name = "Authorization") String authHeader) throws Exception{
+		JSend js=new JSend();
+		js.setStatus(200);	
+		try {
+			
+		}catch(Exception e) {
+			js.setStatus(400);
+			js.setData(e.getMessage());
+		}
+		return js;
+	}
 	@GetMapping("/nonvalide")
-	public JSend GetDepotAValider() throws Exception {
+	public JSend GetDepotAValider(@RequestHeader(name = "Authorization") String authHeader) throws Exception {
 		JSend js=new JSend();
 		js.setStatus(200);
 		try {
 			
-			MoneyNonValide[] get=Money_service.getMoneyNonValide();
+			MoneyNonValide[] get=Money_service.getMoneyNonValide(authHeader);
 			js.setData(get);
 		}catch(Exception e) {
 			js.setStatus(400);
@@ -37,11 +51,13 @@ public class MoneyController {
 	}
 	
 	@PutMapping("/valide/{idmouvement}")
-	public JSend SetValidation(@PathVariable int idmouvement)throws Exception{
+	public JSend SetValidation(@PathVariable String idmouvement,@RequestHeader(name = "Authorization") String authHeader)throws Exception{
+		System.out.print("token === "+authHeader);
 		JSend js=new JSend();
 		js.setStatus(200);
 		try {
-			Boolean valiny=Money_service.Validation(idmouvement);
+			int id=Integer.parseInt(idmouvement);
+			Boolean valiny=Money_service.Validation(id,authHeader);
 			js.setData(valiny);
 		}catch(Exception e) {
 			js.setStatus(400);
@@ -52,13 +68,13 @@ public class MoneyController {
 	}
 	
 	@PostMapping("/deposer")
-	public JSend deposer(@RequestBody Map<String,String> args)throws Exception {
+	public JSend deposer(@RequestBody Map<String,String> args,@RequestHeader(name = "Authorization") String authHeader)throws Exception {
 		JSend send = new JSend();
 		send.setStatus(200);
 		try {
-			int id_utilisateur=new Integer(args.get("id_utilisateur"));
 			double montant= Double.parseDouble(args.get("montant"));
-			boolean val =Money_service.deposer(id_utilisateur, montant);
+			String mdp=args.get("mdp").toString();
+			boolean val =Money_service.deposer(montant,mdp,authHeader);
 			send.setData(val);
 		}catch(Exception e) {
 			send.setStatus(400);
@@ -68,13 +84,13 @@ public class MoneyController {
 	}
 	
 	@PostMapping("/retirer")
-	public JSend retirer(@RequestBody Map<String,String> args)throws Exception {
+	public JSend retirer(@RequestBody Map<String,String> args,@RequestHeader(name = "Authorization") String authHeader)throws Exception {
 		JSend send = new JSend();
 		send.setStatus(200);
 		try {
 			int id_utilisateur=new Integer(args.get("id_utilisateur"));
 			double montant= Double.parseDouble(args.get("montant"));
-			boolean val =Money_service.retirer(id_utilisateur, montant);
+			boolean val =Money_service.retirer(id_utilisateur, montant,authHeader);
 			send.setData(val);
 		}catch(Exception e) {
 			send.setStatus(400);
@@ -83,13 +99,13 @@ public class MoneyController {
 		return send;
 	}
 	
-	@GetMapping("/solde/{id_utilisateur}/{dates}")
-	public JSend getSolde(@PathVariable int id_utilisateur, @PathVariable String dates) throws Exception {
+	@GetMapping("/solde")
+	public JSend getSolde(@RequestHeader(name = "Authorization") String authHeader) throws Exception {
 		JSend js=new JSend();
 		js.setStatus(200);
 		try {
 			
-			double solde=Money_service.getSolde(id_utilisateur, dates);
+			double solde=Money_service.getSolde(authHeader);
 			js.setData(solde);
 		}catch(Exception e) {
 			js.setStatus(400);
@@ -98,3 +114,4 @@ public class MoneyController {
 		return js;
 	}
 }
+ 

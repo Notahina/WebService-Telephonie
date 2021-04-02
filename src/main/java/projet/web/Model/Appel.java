@@ -11,6 +11,37 @@ public class Appel {
 	double duree;
 	String date_appel;
 	
+
+	public Appel[] get_historique(int idUtilisateur,String types,String dates,Connection c) throws Exception
+	{
+		Model model=new Model();
+		String req="SELECT historique_appel("+idUtilisateur+","+types+","+dates+")";
+		
+		Object[] ob=model.getResult(req,new Appel(), c);
+		Appel[] appel=new Appel[ob.length];
+		for(int i=0;i<ob.length;i++)
+		{
+			appel[i]=(Appel)ob[i];
+		}
+		return appel;
+	}
+	
+	
+	
+	public boolean appeler(int idUtilisateur,String numero2,double duree,String dates,Connection c) throws Exception
+	{
+		boolean val=false;
+		String req="appeler("+idUtilisateur+","+numero2+","+duree+","+dates+")";
+		return val;
+	}
+	
+	public double duree_appel_effectuable(int idUtilisateur,int numero2,String daty,Connection c) throws Exception
+	{
+		Model model=new Model();
+		String req="duree_credit_forfait("+idUtilisateur+","+numero2+",'"+daty+"')";
+		double duree=(double)model.getOne(req, "double", c);
+		return duree;
+	}
 	public Appel() {}
 	
 	public Appel(int id_appel, String numero1, String numero2, double duree, String date_appel) {
@@ -65,28 +96,6 @@ public class Appel {
 	///
 	//numero1= numero miantso
 	//numero2= numero antsoina
-	public Appel[] get_historique(int idUtilisateur,String types,String dates,Connection c) throws Exception
-	{
-		Model model=new Model();
-		String req="";
-		Utilisateur utilisateur=new Utilisateur().get_by_id(idUtilisateur, c);
-		String numero_utilisateur=utilisateur.getTelephone();
-		if(types.compareTo("entree")==0)
-		{
-			req="SELECT*FROM APPEL WHERE NUMERO2='"+numero_utilisateur+"' AND DATE_APPEL<='"+dates+"'";
-		}
-		if(types.compareTo("sortie")==0)
-		{
-			req="SELECT*FROM APPEL WHERE NUMERO1='"+numero_utilisateur+"' AND DATE_APPEL<='"+dates+"'";
-		}
-		Object[] ob=model.getResult(req,new Appel(), c);
-		Appel[] appel=new Appel[ob.length];
-		for(int i=0;i<ob.length;i++)
-		{
-			appel[i]=(Appel)ob[i];
-		}
-		return appel;
-	}
 	
 	//OFFRE->CREDIT
 	
