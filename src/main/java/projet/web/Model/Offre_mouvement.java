@@ -98,6 +98,14 @@ public class Offre_mouvement {
 
 
 
+	public boolean acheter_offre(int idUtilisateur,int idOffre,String typeAchat,String dates,Connection c) throws Exception
+	{
+		boolean val=false;
+		Model model=new Model();
+		String req="acheter_offre("+idUtilisateur+","+idOffre+",'"+typeAchat+"','"+dates+"')";
+		val=(boolean)model.getOne(req, "boolean", c);
+		return val;
+	}
 	public double get_solde_offre(int idUtilisateur,int idOffre,Connection c) throws Exception
 	{
 		Model model=new Model();
@@ -127,18 +135,18 @@ public class Offre_mouvement {
 		double solde_credit=new Credit_mouvement().get_solde_credit(idUtilisateur,dates,c);
 		
 		Offre offre=new Offre().get_by_id(idOffre,c);
-		if(offre.getPrix()<=solde_credit)
+		if(offre.getPrix_offre()<=solde_credit)
 		{
 			//offre mouvement
 			int id_mouvement=model.nextVal("Offre_mouvement", c);
 			int type_mouvement=1;
-			double prix=offre.getPrix();
+			double prix=offre.getPrix_offre();
 			Offre_mouvement om=new Offre_mouvement(id_mouvement,idOffre,prix,idUtilisateur,type_mouvement,dates);
 			model.inserer("OFFRE_MOUVEMENT", null, om, c);
 			
 			//credit mouvement
 			int types_mouvement_credit=-1;
-			double montant=offre.getPrix();
+			double montant=offre.getPrix_offre();
 			Credit_mouvement cm=new Credit_mouvement(idUtilisateur,types_mouvement_credit,montant,dates);
 			model.inserer("CREDIT_MOUVEMENT", null,cm, c);
 			val =true;
@@ -155,19 +163,19 @@ public class Offre_mouvement {
 		
 		Offre offre=new Offre().get_by_id(idOffre,c);
 		
-		if(offre.getPrix()<=solde_money)
+		if(offre.getPrix_offre()<=solde_money)
 		{
 			//offre mouvement
 			int id_mouvement=model.nextVal("Offre_mouvement", c);
 			int type_mouvement=1;
-			double prix=offre.getPrix();
+			double prix=offre.getPrix_offre();
 			Offre_mouvement om=new Offre_mouvement(id_mouvement,idOffre,prix,idUtilisateur,type_mouvement,dates);
 			model.inserer("OFFRE_MOUVEMENT", null, om, c);
 			
 			//money mouvement
 			int id_money_mouvement=model.nextVal("MONEY_MOUVEMENT", c);
 			int types=-1;
-			double montant=offre.getPrix();
+			double montant=offre.getPrix_offre();
 			int etat=1;
 			
 			Money_mouvement mm=new Money_mouvement(id_money_mouvement,idUtilisateur,types,montant,dates,etat);

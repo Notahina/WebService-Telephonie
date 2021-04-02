@@ -114,6 +114,7 @@ public class Model{
 		Field[] fl=ob.getClass().getDeclaredFields();
 		String mysql="INSERT INTO "+nomTable+" (";
 		int first=0;
+		System.out.println("inserteeeee");
 		for(int i=0;i<attribut.length;i++)
 		{
 			mysql=mysql+fl[i].getName();
@@ -153,8 +154,8 @@ public class Model{
 		ResultSetMetaData resultMeta=result.getMetaData();
 		while(result.next()){
 			for(int i=1;i<=resultMeta.getColumnCount();i++){
-//				System.out.println("columnTypeName="+resultMeta.getColumnTypeName(i));
-				if (resultMeta.getColumnTypeName(i).compareTo("int4")==0) {
+				System.out.println(resultMeta.getColumnName(i)+"="+resultMeta.getColumnTypeName(i));
+				if (resultMeta.getColumnTypeName(i).startsWith("int") || resultMeta.getColumnTypeName(i).compareTo("serial")==0) {
 					valiny.add(result.getInt(i));
 //                    System.out.println(resultMeta.getColumnName(i)+"==INT");                        
 				}
@@ -162,7 +163,7 @@ public class Model{
 					valiny.add(result.getDouble(i));
 //                    System.out.println(resultMeta.getColumnName(i)+"==DOUBLE");
 				}
-				if(resultMeta.getColumnTypeName(i).compareTo("varchar")==0 || resultMeta.getColumnTypeName(i).compareTo("timestamp")==0)
+				if(resultMeta.getColumnTypeName(i).compareTo("varchar")==0 || resultMeta.getColumnTypeName(i).compareTo("timestamp")==0 || resultMeta.getColumnTypeName(i).compareTo("date")==0 )
 				{
 					valiny.add(result.getString(i));
 //                    System.out.println(resultMeta.getColumnName(i)+"==STRING");
@@ -249,6 +250,10 @@ public class Model{
                 if(type_retour.compareTo("String")==0)
                 {
                     val=result.getString(1);
+                }
+                if(type_retour.compareTo("boolean")==0)
+                {
+                    val=result.getBoolean(1);
                 }
             }
             result.close();

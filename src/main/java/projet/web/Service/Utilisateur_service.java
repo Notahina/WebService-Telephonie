@@ -1,12 +1,30 @@
 package projet.web.Service;
 
 import java.sql.Connection;
+import java.sql.Statement;
 
 import projet.web.Model.Helper;
+import projet.web.Model.Token;
 import projet.web.Model.UserAdmin;
 import projet.web.Model.Utilisateur;
 
 public class Utilisateur_service {
+	public static Boolean Logout(String token) throws Exception{
+		Connection c=new Helper().getConnection();
+		try {
+			Token t=new Token();
+			String tok=t.BearerToken(token);
+			String requete="DELETE FROM token where id_token='"+tok+"'";
+			System.out.println(requete);
+			Statement state= c.createStatement();
+			state.execute(requete);
+			return true;
+		}catch(Exception e) {
+			throw e;
+		}finally {
+			c.close();
+		}	
+	}
 	public static String LoginAdminToken(String login,String pwd)throws Exception{
 		Connection c=new Helper().getConnection();
 		try {

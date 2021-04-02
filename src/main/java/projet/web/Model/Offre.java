@@ -6,25 +6,25 @@ import java.util.Date;
 public class Offre {
 	int id_offre;
 	String nom_offre;
-	String date_offre;
+	double prix_offre;
 	int validite;
-	String type_offre;
-	double prix;
+	String date_offre;
 	
 	public Offre() {}
 	
-	public Offre(int id_offre, String nom_offre, String date_offre, int validite, String type_offre, double prix) {
+
+	
+	public Offre(int id_offre, String nom_offre, double prix_offre, int validite, String date_offre) {
 		super();
 		this.id_offre = id_offre;
 		this.nom_offre = nom_offre;
-		this.date_offre = date_offre;
+		this.prix_offre = prix_offre;
 		this.validite = validite;
-		this.type_offre = type_offre;
-		this.prix = prix;
+		this.date_offre = date_offre;
 	}
 
-	
-	
+
+
 	public int getId_offre() {
 		return id_offre;
 	}
@@ -73,26 +73,16 @@ public class Offre {
 
 
 
-	public String getType_offre() {
-		return type_offre;
+
+
+	
+
+	public double getPrix_offre() {
+		return prix_offre;
 	}
 
-
-
-	public void setType_offre(String type_offre) {
-		this.type_offre = type_offre;
-	}
-
-
-
-	public double getPrix() {
-		return prix;
-	}
-
-
-
-	public void setPrix(double prix) {
-		this.prix = prix;
+	public void setPrix_offre(double prix_offre) {
+		this.prix_offre = prix_offre;
 	}
 
 	public Boolean insertOffre(Offre offre ,Connection c) throws Exception {

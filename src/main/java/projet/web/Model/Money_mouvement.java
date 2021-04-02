@@ -172,40 +172,27 @@ public class Money_mouvement {
 		double val=0;
 		
 		String req="SELECT SUM(MONTANT*TYPES) FROM MONEY_MOUVEMENT WHERE ID_UTILISATEUR="+idUtilisateur+" AND DATE_TRANSACTION<='"+dates+"' AND ETAT=1 GROUP BY ID_UTILISATEUR";
+		System.out.println(req);
 		val=(double) model.getOne(req, "double" , c);
 		return val;
 	}
 	
 	///////DEPOT
-	
-	public boolean deposer(int idUtilisateur,double montant,Connection c) throws Exception
+
+	public boolean deposer(int idUtilisateur,double montant,String daty,Connection c) throws Exception
 	{
 		Model model=new Model();
-		int idMouvement=model.nextVal("MONEY_MOUVEMENT", c);
-		int types=1;
-		String dates=model.getNow(c);
-		int etat=0;
-		Money_mouvement mm=new Money_mouvement(idMouvement, idUtilisateur, types, montant, dates,etat);
-		model.inserer("MONEY_MOUVEMENT", null, mm, c);
-		return true;
-		
+		String req="SELECT depot_money("+idUtilisateur+","+montant+",'"+daty+"')";
+		boolean val=(boolean)model.getOne(req, "boolean", c);
+		return val;
 	}
 	
-	public boolean retirer(int idUtilisateur,double montant,Connection c) throws Exception
+	public boolean retirer(int idUtilisateur,double montant,String daty,Connection c) throws Exception
 	{
 		boolean val=false;
 		Model model=new Model();
-		String dates=model.getNow(c);
-		double solde=this.get_solde_utilisateur(idUtilisateur, dates, c);
-		if(solde>=montant)
-		{
-			int idMouvement=model.nextVal("MONEY_MOUVEMENT", c);
-			int types=1;
-			int etat=1;
-			Money_mouvement mm=new Money_mouvement(idMouvement, idUtilisateur, types, montant, dates,etat);
-			model.inserer("MONEY_MOUVEMENT", null, mm, c);
-			val=true;
-		}
+		String req="SELECT retrait_money("+idUtilisateur+","+montant+",'"+daty+"')";
+		val=(boolean)model.getOne(req,"boolean", c);
 		return val;
 	}
 }

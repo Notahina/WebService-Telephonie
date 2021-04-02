@@ -9,13 +9,21 @@ public class Token {
 	String id_token;
 	int id_utilisateur;
 	String date_expiration;
-	public Token VerifyToken(Connection c,String idtoken,Date date)throws Exception {
-		String datenow=AuthService.DateToString(date);
-		String requete="SELECT * FROM Token WHERE Id_token='"+idtoken+"' and date_expiration>'"+datenow+"' order by date_expiration desc ";
+	public String BearerToken(String token) throws Exception{
+		String[] bearer=token.split(" ");
+		System.out.println("lentgh bearer"+bearer.length);
+		return bearer[1];
+	}
+	public Token VerifyToken(Connection c,String idtoken)throws Exception {
+		String tokenBearer=this.BearerToken(idtoken);
+		Date now=new Date();
+		String date=AuthService.DateToString(now);
+		String requete="SELECT * FROM Token WHERE Id_token='"+tokenBearer+"' and date_expiration>'"+date+"' order by date_expiration desc ";
 		Model m=new Model();
 		Object[] o=m.getResult(requete, new Token(), c);
+		System.out.println("length token"+o.length);
+		if(o.length==0) throw new Exception("999");
 		Token token=(Token) o[0];
-		if(o.length==0) throw new Exception("Veillez vous reconnecter");
 		return token;
 	}
 	public Token VerifyToken(Connection c,int iduser,Date date)throws Exception {

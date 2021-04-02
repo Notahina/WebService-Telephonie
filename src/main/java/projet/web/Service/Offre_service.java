@@ -1,17 +1,35 @@
 package projet.web.Service;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import projet.web.Model.Credit_mouvement;
+import projet.web.Model.Forfait_offre;
 import projet.web.Model.Helper;
+import projet.web.Model.Model;
 import projet.web.Model.Offre;
 import projet.web.Model.Offre_mouvement;
 import projet.web.Model.Stat_offre;
+import projet.web.Model.Token;
 
 public class Offre_service {
+	public static Boolean insertForfait(Forfait_offre[] fo,String authHEader) throws SQLException {
+		Connection c=new Helper().getConnection();
+		try {
+			Forfait_offre fot=new Forfait_offre();
+			for(int i=0;i<fo.length;i++) {
+				fot.insertForfaitOffre(fo[i], c);
+			} 
+			return true;
+		}catch(Exception e) {
+			return false;
+		}finally{
+			c.close();
+		}
+	}
 	public static Boolean insertOffre(Offre offre) throws Exception{
 		Connection c=new Helper().getConnection();
 		try {
@@ -46,7 +64,23 @@ public class Offre_service {
 		}
 		
 	}
-	public static boolean achat_offre_credit(int id_utilisateur,int id_offre) throws Exception
+
+	public static boolean acheter_offre(String authHeader,int idOffre,String typeAchat,String dates) throws Exception
+	{
+		Connection c=new Helper().getConnection();
+		try {
+			Token token=new Token().VerifyToken(c, authHeader);
+			String req="SELECT acheter_offre("+token.getId_utilisateur()+","+idOffre+",'"+typeAchat+"','"+dates+"')";
+			boolean status=(boolean) new Model().getOne(req, "boolean", c);
+			if(status==false) {
+				throw new Exception("Votre solde "+typeAchat.toLowerCase()+" est insuffisant");
+			}
+			return status;
+		}finally {
+			c.close();
+		}
+	}
+	/*public static boolean achat_offre_credit(int id_utilisateur,int id_offre) throws Exception
 	{
 		Connection c=new Helper().getConnection();
 		try {
@@ -66,5 +100,5 @@ public class Offre_service {
 		}finally {
 			c.close();
 		}
-	}
+	}*/
 }
