@@ -8,6 +8,7 @@ import java.util.List;
 
 import projet.web.Model.Credit_mouvement;
 import projet.web.Model.Forfait_offre;
+import projet.web.Model.Getsoldeforfait;
 import projet.web.Model.Helper;
 import projet.web.Model.Model;
 import projet.web.Model.Offre;
@@ -70,12 +71,46 @@ public class Offre_service {
 		Connection c=new Helper().getConnection();
 		try {
 			Token token=new Token().VerifyToken(c, authHeader);
-			String req="SELECT acheter_offre("+token.getId_utilisateur()+","+idOffre+",'"+typeAchat+"','"+dates+"')";
+			String req="SELECT acheter_offre("+token.getId_utilisateur()+","+idOffre+",'"+typeAchat+"','now()')";
 			boolean status=(boolean) new Model().getOne(req, "boolean", c);
 			if(status==false) {
 				throw new Exception("Votre solde "+typeAchat.toLowerCase()+" est insuffisant");
 			}
 			return status;
+		}finally {
+			c.close();
+		}
+	}
+	
+	public static Offre[] offre_of_utilisateur(String autHeader,String dates)throws Exception{
+		Connection c=new Helper().getConnection();
+		try {
+			Token token=new Token().VerifyToken(c, autHeader);
+			String req="select *from get_offre_utilisateur("+token.getId_utilisateur()+",'now()')";
+			Object[] ob=new Model().getResult(req, new Offre(), c);
+			Offre[] offre=new Offre[ob.length];
+			for(int i=0;i<offre.length;i++)
+			{
+				offre[i]=(Offre)ob[i];
+			}
+			return offre;
+		}finally {
+			c.close();
+		}
+		
+	}
+	public static Getsoldeforfait[] soldeforfaituser(String authHeader,String date,String idoffre) throws Exception{
+		Connection c=new Helper().getConnection();
+		try {
+			Model model=new Model();
+			Token token=new Token().VerifyToken(c, authHeader);
+			String requete="select * from get_solde_forfait_join("+token.getId_utilisateur()+","+idoffre+",'now()')";
+			Object[] o=model.getResult(requete, new Getsoldeforfait(), c);
+			Getsoldeforfait[] get=new Getsoldeforfait[o.length];
+			for(int i=0;i<get.length;i++) {
+				get[i]=(Getsoldeforfait)o[i];
+			}
+			return get;
 		}finally {
 			c.close();
 		}

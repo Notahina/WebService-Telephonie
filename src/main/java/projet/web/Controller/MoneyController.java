@@ -72,7 +72,9 @@ public class MoneyController {
 		JSend send = new JSend();
 		send.setStatus(200);
 		try {
+			System.out.println("okk mety");
 			double montant= Double.parseDouble(args.get("montant"));
+			System.out.println("montant "+montant);
 			String mdp=args.get("mdp").toString();
 			boolean val =Money_service.deposer(montant,mdp,authHeader);
 			send.setData(val);

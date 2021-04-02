@@ -16,7 +16,7 @@ public class Credit_service {
 		try {
 			Model model=new Model();
 			Token token=new Token().VerifyToken(c, auth);
-			String req="SELECT get_solde_credit("+token.getId_utilisateur()+",'"+dates+"')";
+			String req="SELECT get_solde_credit("+token.getId_utilisateur()+",'now()')";
 			double valiny=(double)model.getOne(req,"double",c);
 			return valiny;
 		}finally {
@@ -28,7 +28,6 @@ public class Credit_service {
 	public static Boolean achat_credit_code(String code,String auth) throws Exception{
 		Connection c=new Helper().getConnection();
 		try {
-			Model model=new Model();
 			Token token=new Token().VerifyToken(c, auth);
 			Credit_mouvement cm=new Credit_mouvement();
 			boolean valiny=cm.acheter_credit_code(token.getId_utilisateur(),code, c);

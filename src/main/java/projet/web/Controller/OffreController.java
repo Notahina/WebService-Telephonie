@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import projet.web.Model.Appel;
 import projet.web.Model.Forfait_offre;
+import projet.web.Model.Getsoldeforfait;
 import projet.web.Model.JSend;
 import projet.web.Model.Offre;
 import projet.web.Model.Stat_offre;
@@ -100,6 +101,31 @@ public class OffreController {
 		return send;
 	}
 	
+	@GetMapping("/offre_utilisateur/{dates}")
+	public JSend offre_utilisateur(@PathVariable String dates,@RequestHeader(name = "Authorization") String token)throws Exception{
+		JSend send = new JSend();
+		send.setStatus(200);
+		try {
+			Offre[] offre=Offre_service.offre_of_utilisateur(token, dates);
+			send.setData(offre);
+		}catch(Exception e) {
+			send.setMessage(e.getMessage());
+			send.setStatus(400);
+		}
+		return send;
+	}
+	@GetMapping("/soldeforfait/{dates}/{idoffre}")
+	public JSend soldeforfait(@RequestHeader(name = "Authorization") String token,@PathVariable String dates,@PathVariable String idoffre) {
+		JSend send=new JSend();
+		try {
+			send.setStatus(200);
+			Getsoldeforfait[] get=Offre_service.soldeforfaituser(token, dates, idoffre);
+			send.setData(get);
+		}catch(Exception e) {
+			send.setStatus(400);
+		}
+		return send;
+	}
 //	@PostMapping("/achat_offre_money")
 //	public JSend achat_offre_money(@RequestBody Map<String,String> args)throws Exception {
 //		JSend send = new JSend();

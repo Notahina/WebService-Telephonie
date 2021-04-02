@@ -11,6 +11,13 @@ public class Utilisateur {
 	String telephone;
 	String mdp;
 	String types;
+	public void CheckMotdepasse(Connection c,int iduser,String mdp) throws Exception{
+		Model model=new Model();
+		String requete="SELECT * FROM UTILISATEUR where id_utilisateur="+iduser+" and mdp=crypt('"+mdp+"',mdp)";
+		Object[] oo=model.getResult(requete, new Utilisateur(),c );
+		System.out.print("taille="+oo.length);
+		if(oo.length==0) throw new Exception("Votre mot de passe est incorrect");
+	}
 	public void CreateUser(Connection c,Utilisateur user)throws Exception {
 		Boolean b=false;
 		if(c==null) {

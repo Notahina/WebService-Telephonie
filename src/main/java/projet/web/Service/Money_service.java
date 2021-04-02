@@ -9,6 +9,7 @@ import projet.web.Model.Model;
 import projet.web.Model.MoneyNonValide;
 import projet.web.Model.Money_mouvement;
 import projet.web.Model.Token;
+import projet.web.Model.Utilisateur;
 
 public class Money_service {
 	public static MoneyNonValide[] getMoneyNonValide(String idtoken) throws Exception{
@@ -42,10 +43,11 @@ public class Money_service {
 		Connection c=new Helper().getConnection();
 		try {
 
-			Date date=new Date();
-			String now=AuthService.DateToString(date);
 			Token token=new Token().VerifyToken(c, authHeader);
-			String req="SELECT depot_money("+token.getId_utilisateur()+","+montant+",'"+now+"')";
+			Utilisateur user=new Utilisateur();
+			user.CheckMotdepasse(c, token.getId_utilisateur(), mdp);
+			String req="SELECT depot_money("+token.getId_utilisateur()+","+montant+",'now()')";
+			System.out.println("requte "+req);
 			Boolean valiny=(boolean) new Model().getOne(req, "boolean", c);
 			return valiny;
 		}catch(Exception e) {
@@ -58,10 +60,8 @@ public class Money_service {
 		Connection c=new Helper().getConnection();
 		try {
 
-			Date date=new Date();
-			String now=AuthService.DateToString(date);
 			Token token=new Token().VerifyToken(c, authHeader);
-			String req="SELECT retrait_money("+token.getId_utilisateur()+","+montant+",'"+now+"')";
+			String req="SELECT retrait_money("+token.getId_utilisateur()+","+montant+",'now()')";
 			Boolean valiny=(boolean)new Model().getOne(req, "boolean", c);
 			return valiny;
 		}catch(Exception e) {
@@ -74,11 +74,9 @@ public class Money_service {
 	public static double getSolde(String authHeader)throws Exception{
 		Connection c=new Helper().getConnection();
 		try {
-			Date date=new Date();
-			String now=AuthService.DateToString(date);
 			Token token=new Token().VerifyToken(c, authHeader);
 			Model model=new Model();
-			String req="SELECT get_solde_money("+token.getId_utilisateur()+",'"+now+"')";
+			String req="SELECT get_solde_money("+token.getId_utilisateur()+",'now()')";
 			double valiny=(double)model.getOne(req, "double", c);
 			return valiny;
 		}catch(Exception e) {

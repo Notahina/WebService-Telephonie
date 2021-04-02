@@ -237,6 +237,7 @@ BEGIN
         RETURN val;
 END;
 $$  LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION acheter_offre(idUtilisateur int,idOffre int,typeAchat varchar(10), dates timestamp)
 RETURNS BOOLEAN AS $$
 DECLARE solde DOUBLE PRECISION;
@@ -280,6 +281,9 @@ BEGIN
         RETURN val;
 END;
 $$  LANGUAGE plpgsql;
+
+select acheter_offre(14,1,'MONEY','now()');
+ 
 CREATE OR REPLACE FUNCTION get_mouvement_forfait_valide(daty timestamp) RETURNS SETOF MOUVEMENT_FORFAIT AS $$
     SELECT MOUVEMENT_FORFAIT.* 
 	FROM OFFRE,MOUVEMENT_FORFAIT 
@@ -736,11 +740,19 @@ CREATE VIEW Forfait AS SELECT fo.Id_forfait_offre,o.Nom_offre ,u.nom_utilisation
 FROM FORFAIT_OFFRE fo join OFFRE o on fo.Id_offre=o.Id_offre
 Join Utilisation u on fo.ID_UTILISATion=u.ID_UTILISATion;
 
+--------------------------OFFRE UTILISATEUR-------------------------------
+CREATE OR REPLACE FUNCTION get_offre_utilisateur(idUtilisateur int,daty timestamp) RETURNS SETOF OFFRE AS $$
+    SELECT DISTINCT(OFFRE.*) 
+	FROM OFFRE,ACHAT_OFFRE
+	WHERE OFFRE.ID_OFFRE=ACHAT_OFFRE.ID_OFFRE 
+	AND (ACHAT_OFFRE.DATES::timestamp+ OFFRE.VALIDITE*interval '24 HOUR')>=daty
+$$ LANGUAGE SQL;
+
+
 CREATE VIEW MONEYNONVALIDE as 
 	SELECT m.ID_MOUVEMENT,u.ID_UTILISATEUR,m.TYPES,u.TELEPHONE,m.DATE_TRANSACTION,m.MONTANT,m.ETAT
 	FROM UTILISATEUR u join MONEY_MOUVEMENT m on u.ID_UTILISATEUR =m.ID_UTILISATEUR 
 	where m.TYPES=1 and etat=0;
-
 
 
 
