@@ -22,7 +22,7 @@ public class Helper {
        // String user="root";
         //String passwd="";
         //String base="BOURSE";
-        public Connection getConnection()
+        public Connection getConnectionHeroku()
         {
             
             Connection connect=null;
@@ -52,7 +52,7 @@ public class Helper {
             }
             return connect;
         }
-        public Connection getConnectionHeroku()
+        public Connection getConnection()
         {
             
             Connection connect=null;
@@ -63,10 +63,10 @@ public class Helper {
                 //Class.forName("com.mysql.jdbc.Driver");
               Class.forName("org.postgresql.Driver");
       		  System.out.println("Driver O.K.");
-      		  String base="dbqiomboalisuu";
+      		  String base="d95tfsaeju6b18";
       		  String url = "jdbc:postgresql://ec2-54-73-147-133.eu-west-1.compute.amazonaws.com:5432/"+base;
-    		  String user = "ppuswbnvodawvv";
-    		  String passwd = "50f031c8009af390b938e54d7319bd2770440d7557386b99c30373069e57d8d7";
+    		  String user = "rkieoczhzltzfc";
+    		  String passwd = "828cda5b3c4d8bdd2c17a304956887e280ccab9b7da665af6fd3f780701c1d3d";
     		  
                 // Setup the connection with the DB
                 connect = DriverManager.getConnection(url, user, passwd);
